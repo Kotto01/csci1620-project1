@@ -1,6 +1,4 @@
-# gui.py
 from PyQt6 import QtCore, QtWidgets
-from logic import votes
 
 
 class Ui_Candidate_Menu(object):
@@ -63,34 +61,3 @@ class Ui_Vote_Menu(object):
         self.Vote_Menu_label.setText(_translate("Vote_Menu",
                                                 "<html><head/><body><p><span style=\" font-size:16pt;\">Vote Menu</span></p></body></html>"))
 
-
-class VoteMenu(QtWidgets.QDialog, Ui_Vote_Menu):
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.setupUi(self)
-        self.Vote_Button.clicked.connect(self.show_candidate_menu)
-        self.Exit_Button.clicked.connect(QtWidgets.QApplication.instance().quit)
-
-    def show_candidate_menu(self):
-        self.hide()
-        self.candidate_menu = CandidateMenu(parent=self)  # Pass self as the parent
-        self.candidate_menu.show()
-
-
-class CandidateMenu(QtWidgets.QDialog, Ui_Candidate_Menu):
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.setupUi(self)
-
-    def vote(self, candidateName):
-        try:
-            votes[candidateName] += 1
-            print(f"Vote for {candidateName} recorded.")
-            self.hide()  # Hide the Candidate Menu
-            parent_widget = self.parent()
-            if parent_widget is not None:
-                parent_widget.show()  # Show the Vote Menu
-            else:
-                print("Error: Parent widget is None.")
-        except Exception as e:
-            print("An error occurred during voting:", e)
